@@ -1,0 +1,29 @@
+NOTES:
+* login and sign up works at the moment
+* Browse projects is fine, now i show more information about the single project
+    NOTE -- in single project detail getUsername returns null but the database seems fine
+* Search needs more work
+* Add project works
+* THE NAME AND ABSTARCT OF THE PROJECT BECOMES NULL, SAME WITH THE USER!!! -- i know how to fix this now!
+
+TODO: hash function for the password
+TODO: do the javafx interface
+TODO: leave the project!!
+TODO: add the project to github!
+TODO:printing the keywords with the count of projects -- using raw query-- think about join and group by
+TODO: think about how to make the proejct link work more smoothly with the queriries
+TODO: Building JOIN Queries
+
+Think About:
+* works with the fx interface
+* auto-completion; get the first word starting with the input user gave ; keyword consistency
+* a way to edit the keywords later on --maybe just by the creator and participants
+
+Report:
+* also talk about object relational mapping -- explain what it is and why i used it
+* and then talk about the ormlite and some
+* i can include some code snippets in the report as examples
+* maybe compare the use of an object relational mapping with hard coding!! -- you have the code for this in the backup
+* you can also talk about the disdavantages
+* you must deliver the code -- upload it to github!! add also as appendix
+* at least 15 pages

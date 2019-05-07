@@ -2,11 +2,9 @@
  * Created by idilhanhan on 6.04.2019.
  */
 import java.io.IOException;
-import java.nio.channels.MembershipKey;
 import java.sql.SQLException;
 import java.util.*;
 
-import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import dao.*;
 import model.*;
@@ -17,7 +15,7 @@ public class PFP {
      *
      * @param
      */
-    public static void loginMenu(){
+    private static void loginMenu(){
         System.out.println("1. Login");
         System.out.println("2. SignUp");
         System.out.println("3. Quit");
@@ -28,7 +26,7 @@ public class PFP {
      *
      * THIS WILL ALSO INCLUDE SEARCH!!
      */
-    public static void menu(){
+    private static void menu(){
         System.out.println("1. Browse Project Ideas");
         System.out.println("2. Search");
         System.out.println("3. Add Project");
@@ -39,54 +37,47 @@ public class PFP {
 
     public static void addKeyword(){};
 
-    public static void showProjects(List<ProjectIdea> projects){
+    private static void showProjects(List<ProjectIdea> projects){
         for (ProjectIdea project : projects){
             System.out.println(project);
         }
     }
 
-    public static void showProjectDetail(ProjectIdea project, UserDAOImp userDAO, ParticipantsDAOImp parDAO){
+    private static void showProjectDetail(ProjectIdea project, UserDAOImp userDAO, ParticipantsDAOImp parDAO){
         System.out.println(project);
         System.out.print("Creator: ");
         System.out.println(userDAO.getUser(project.getCreator()).getUsername());
         System.out.print("Participants: ");
-        List<Participants> participants = parDAO.getAllParticipants(project);
-        for (Participants participant : participants){
-            System.out.println(userDAO.getUser(participant.getParticipant().getUserId())); //TODO GETUSERNAME RETURNS NULL
+        List<User> participants = parDAO.getAllParticipants(project, userDAO);
+        for (User participant : participants){
+            System.out.println(participant);
         }
-        System.out.println("Limit for project group: " + project.getMember_limit() + "Members");
+        System.out.println("Limit for project group: " + project.getMember_limit() + " Members");
     }
 
-    /*public static void showProject(ProjectIdeaDAOImp projectDAO, int project_choice){ // I am not sure about these
-        if (project_choice != -1){
-            //Here show more details about a project and ask if the user wants to join this group
-            //singleProject(projectDAO, project_choice, scan);
-            ProjectIdea currProject = projectDAO.getProjectIdea(project_choice);
-            System.out.println(currProject);
-            //System.out.println("Do you want to join the group? (y/n): ");
-            //String answer = scan.next();
-            //if (answer.equalsIgnoreCase("y")){
-            //    parDAO.join(currUser, currProject);
-            //}
-        }
+    private static boolean join(User currUser, ProjectIdea currProject, ParticipantsDAOImp parDAO){
+        Scanner scan = new Scanner( System.in);
 
-
-        ProjectIdea currProject = projectDAO.getProjectIdea(project_choice);
-        System.out.println(currProject);
-    }*/
-
-   /* public static void join(ParticipantsDAOImp parDAO, ProjectIdea currProject, User currUser, Scanner scan){
         System.out.println("Do you want to join the group? (y/n): ");
         String answer = scan.next();
         if (answer.equalsIgnoreCase("y")){
             parDAO.join(currUser, currProject);
+            return true;
         }
-    }*/
+        return false;
+    }
 
-   /* public static void joinProject(DAOManager dao, int project_id){
-        // HERE I ALSO NEED THE PARTICIPANT ID
-    }*/
+    private static boolean leave(User currUser, ProjectIdea currProject, ParticipantsDAOImp parDAO){
+        Scanner scan = new Scanner( System.in);
 
+        System.out.println("Do you want to leave the group? (y/n): ");
+        String answer = scan.next();
+        if (answer.equalsIgnoreCase("y")){
+           parDAO.leave(currUser, currProject);
+           return true;
+        }
+        return false;
+    }
 
     public static void main(String[] args) throws IOException, SQLException {
 
@@ -102,16 +93,6 @@ public class PFP {
         ParticipantsDAOImp parDAO = new ParticipantsDAOImp(mainConn);
         KeywordDAOImp keyDAO = new KeywordDAOImp(mainConn);
         IdeaKeyDAOImp ideaKeyDAO = new IdeaKeyDAOImp(mainConn);
-       /*
-        try {
-             userDAO = new UserDAOImp(mainConn);
-             projectDAO = new ProjectIdeaDAOImp(mainConn);
-             parDAO = new ParticipantsDAOImp(mainConn);
-             keyDAO = new KeywordDAOImp(mainConn);
-             ideaKeyDAO = new IdeaKeyDAOImp(mainConn);
-        } catch(SQLException e){
-            System.out.println(e.getMessage());
-        }*/
 
         //3. Login and SignUp page
         User currUser = null;
@@ -166,46 +147,32 @@ public class PFP {
                     int project_choice = Integer.parseInt(scan.next());
                     if (project_choice != -1){
                         //Here show more details about a project and ask if the user wants to join this group
-                        //singleProject(projectDAO, project_choice, scan);
                         ProjectIdea currProject = projectDAO.getProjectIdea(project_choice);
                         showProjectDetail(currProject, userDAO, parDAO);
-                        System.out.println("Do you want to join the group? (y/n): ");
-                        String answer = scan.next();
-                        if (answer.equalsIgnoreCase("y")){
-                            parDAO.join(currUser, currProject);
-                        }
+                        join(currUser, currProject, parDAO);
                     }
                 }
                 else if (choice == 2){ //Search
                     scan.nextLine(); //TODO: WHY
                     System.out.print("Search: ");
                     String sentence = scan.nextLine();
-                    Set<IdeaKey> projects= new HashSet<IdeaKey>();
-                  //  List<IdeaKey> projects = new ArrayList<IdeaKey>;
+                    Set<ProjectIdea> projects= new HashSet<ProjectIdea>();
                     String [] keys = sentence.split(" ");
                     for (String key : keys){
                         System.out.println("inside for--" + key);
-                        //in this loop all of the projects that are linked with the keyword is gathered
-                        //set is used to ensure the objects are not duplicated
-                       // projects.addAll(ideaKeyDAO.search(new Keyword(key)));
-                        projects.addAll(ideaKeyDAO.search(keyDAO.getByWord(key)));
+                        projects.addAll(ideaKeyDAO.search(keyDAO.getByWord(key), projectDAO));
                     }
                     //Print all of the projects
-                    for (IdeaKey project : projects){
-                        System.out.println(projectDAO.getProjectIdea(project.getProject().getIdea_id())); //TODO: NAME AND ABSTRACT BECOMES NULL -- use its own access object!
+                    for (ProjectIdea project : projects){
+                        System.out.println(project);
                     }
                     System.out.println("Enter the id of the project to see more details or enter -1 to exit:" );
                     int project_choice = Integer.parseInt(scan.next());
                     if (project_choice != -1){
                         //Here show more details about a project and ask if the user wants to join this group
-                        //singleProject(projectDAO, project_choice, scan);
                         ProjectIdea currProject = projectDAO.getProjectIdea(project_choice);
-                        System.out.println(currProject);
-                        System.out.println("Do you want to join the group? (y/n): ");
-                        String answer = scan.next();
-                        if (answer.equalsIgnoreCase("y")){
-                            parDAO.join(currUser, currProject);
-                        }
+                        showProjectDetail(currProject, userDAO, parDAO);
+                        join(currUser, currProject, parDAO);
                     }
                 }
                 else if (choice == 3){ //Add Project
@@ -237,36 +204,23 @@ public class PFP {
                 }
                 else if (choice == 4){ //See my projects
                     //leave a project
-                    List<Participants> myProjects = parDAO.queryForEq("participant_id", currUser.getUserId());
+                    List<Participants> myProjects = parDAO.queryForEq("participant_id", currUser.getUserId()); //TODO??
                     for (Participants myProject : myProjects){
                         System.out.println(projectDAO.getProjectIdea(myProject.getProject().getIdea_id()));
                     }
-                   /* System.out.println("Do you want to leave a project? (y/n): " );
-                    String answer = scan.next();
-                    if (answer.equalsIgnoreCase("y")){
-                        System.out.println("Enter the id of the participation to leave the project: ");
-                        int parId = scan.nextInt();
-                    }*/
                     System.out.println("Enter the id of the project to see more details or enter -1 to exit:" );
                     int project_choice = Integer.parseInt(scan.next());
                     if (project_choice != -1){
                         //Here show more details about a project and ask if the user wants to join this group
                         //singleProject(projectDAO, project_choice, scan);
                         ProjectIdea currProject = projectDAO.getProjectIdea(project_choice);
-                        System.out.println(currProject);
-                        System.out.println("Do you want to leave the group? (y/n): ");
-                        String answer = scan.next();
-                        if (answer.equalsIgnoreCase("y")){
-                            parDAO.deleteBuilder().where().eq("project_id", project_choice).and().eq("participant_id", currUser.getUserId());
-                        }
+                        showProjectDetail(currProject, userDAO, parDAO);
+                        leave(currUser, currProject, parDAO);
                     }
                 }
                 menu();
                 choice = Integer.parseInt(scan.next());
             }
         }
-
-
-
     }
 }

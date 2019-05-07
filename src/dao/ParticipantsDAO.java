@@ -15,6 +15,7 @@ import model.User;
  */
 public interface ParticipantsDAO extends Dao<Participants, Integer>{
     void join(User participant, ProjectIdea project);
-    List<Participants> getAllParticipants(ProjectIdea project);
+    void leave(User participant, ProjectIdea project);
+    List<User> getAllParticipants(ProjectIdea project, UserDAOImp userDAO);
 
 }

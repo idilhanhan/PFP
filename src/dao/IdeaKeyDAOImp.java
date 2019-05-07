@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import model.IdeaKey;
@@ -34,15 +34,17 @@ public class IdeaKeyDAOImp extends BaseDaoImpl<IdeaKey, Integer> implements Idea
 
 
     @Override
-    public List<IdeaKey> search(Keyword keyword) {
+    public List<ProjectIdea> search(Keyword keyword, ProjectIdeaDAOImp projectDAO) {
         try{
-            List<IdeaKey> result = super.queryForEq("word_id", keyword.getID());
-            return result;
+            QueryBuilder<IdeaKey, Integer> ideaKeyQB = this.queryBuilder();
+            ideaKeyQB.where().eq("word_id", keyword.getID());
+            QueryBuilder<ProjectIdea, Integer> projectQB = projectDAO.queryBuilder();
+            return (projectQB.join(ideaKeyQB).query());
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
         return null;
-    } //TODO: right now this only returns the ieda key object with the relevant projects you need to write another function in project idea to get some of the projects!!
+    }
 
     //TODO: think about how the search function will work
     //TODO:ADD OVERRIDE TAG TO EVERY RELEVANT PLACE

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import model.ProjectIdea;
@@ -21,14 +23,13 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
         super(conn, Participants.class); //??
     }
 
+
     public void join(User participant, ProjectIdea project){
         try{
             //get the count of users that the project is linked with
             //SQL command: SELECT COUNT(participant_id) FROM participants WHERE project_id = project.getId()
             int count = (int)(this.queryBuilder().where().eq("project_id", project.getIdea_id()).countOf());
             //check if the number is less than the limit
-            System.out.println(count);
-            System.out.println(project.getMember_limit());
 
             if (count < project.getMember_limit()) {
                 super.create(new Participants(participant, project));
@@ -42,10 +43,24 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
 
     }
 
-    public List<Participants> getAllParticipants(ProjectIdea project){
+    public void leave(User participant, ProjectIdea project){
         try{
+            DeleteBuilder<Participants, Integer> parDB = deleteBuilder();
+            parDB.where().eq("participant_id", participant.getUserId()).and().eq("project_id", project.getIdea_id());
+            parDB.delete();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public List<User> getAllParticipants(ProjectIdea project, UserDAOImp userDAO){
+        try{
+            QueryBuilder<Participants, Integer> parQB = this.queryBuilder();
+            parQB.where().eq("project_id", project.getIdea_id());
+            QueryBuilder<User, Integer> userQB = userDAO.queryBuilder();
+            return userQB.join(parQB).query();
             //System.out.println("inside getALL: " + this.queryForEq("project_id", project.getIdea_id()));
-            return this.queryForEq("project_id", project.getIdea_id());
+           // return this.queryForEq("project_id", project.getIdea_id());
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }

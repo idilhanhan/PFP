@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProjectIdeaDAO extends Dao<ProjectIdea, Integer> {
 
     ProjectIdea getProjectIdea(int id);
-    List<ProjectIdea> showAll() throws IOException, SQLException;
+    List<ProjectIdea> showAll();
     void addIdea(ProjectIdea newIdea);
 
 

@@ -43,25 +43,29 @@ public class ProjectIdeaDAOImp extends BaseDaoImpl<ProjectIdea, Integer> impleme
     /**
      * Method that prints all of the project ideas in the database
      */
-    public List<ProjectIdea> showAll() throws IOException, SQLException{
+    public List<ProjectIdea> showAll(){
 /*
 
         GenericRawResults<String[]> rawResults = this.queryRaw("SELECT idea_id, name, abstract  FROM project_idea");
         List<String[]> results = rawResults.getResults();
         System.out.println(results.get(0));*/
-
-        List<ProjectIdea> result = new ArrayList<ProjectIdea>();
-       CloseableIterator<ProjectIdea> itr = this.closeableIterator();
-       //System.out.println(itr.current());
-        try{
-            while(itr.hasNext()){
-                ProjectIdea tmp = itr.next();
-                result.add(tmp);
+        try {
+            List<ProjectIdea> result = new ArrayList<ProjectIdea>();
+            CloseableIterator<ProjectIdea> itr = this.closeableIterator();
+            //System.out.println(itr.current());
+            try {
+                while (itr.hasNext()) {
+                    ProjectIdea tmp = itr.next();
+                    result.add(tmp);
+                }
+            } finally {
+                itr.close();
             }
-        } finally{
-            itr.close();
+            return result;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
         }
-        return result;
     }
 
    //function for more detail

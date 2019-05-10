@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import com.j256.ormlite.support.ConnectionSource;
+import rawdata.pfp.controller.DBManager;
 import rawdata.pfp.model.Keyword;
 import rawdata.pfp.model.Participants;
 import rawdata.pfp.model.ProjectIdea;

@@ -45,4 +45,9 @@ public class Controller { //see if this is necessary?
     public List<ProjectIdea> getAll(){
         return projectDAO.showAll();
     }
+
+    public void join(int projectToJoin){
+        ProjectIdea currProject = projectDAO.getProjectIdea(projectToJoin);
+        parDAO.join(currUser, currProject);
+    }
 }

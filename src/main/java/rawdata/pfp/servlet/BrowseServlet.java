@@ -6,6 +6,7 @@ import rawdata.pfp.model.ProjectIdea;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by idilhanhan on 10.05.2019.
  */
+@WebServlet("/browse.html")
 public class BrowseServlet extends HttpServlet {
 
     Controller controller;

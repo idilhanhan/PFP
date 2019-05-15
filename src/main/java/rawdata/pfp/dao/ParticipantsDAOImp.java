@@ -31,7 +31,7 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
             int count = (int)(this.queryBuilder().where().eq("project_id", project.getIdea_id()).countOf());
             //check if the number is less than the limit
 
-            if (count < project.getMember_limit()) {
+            if (count < project.getMember_limit() || project.getMember_limit() == 0) {
                 super.create(new Participants(participant, project));
             }
             else{

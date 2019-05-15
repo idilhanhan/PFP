@@ -1,4 +1,4 @@
-package rawdata.pfp.controller; /**
+package rawdata.pfp.dao; /**
  * Created by idilhanhan on 13.04.2019.
  */
 

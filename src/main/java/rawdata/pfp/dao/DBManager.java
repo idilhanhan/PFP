@@ -2,7 +2,6 @@ package rawdata.pfp.dao; /**
  * Created by idilhanhan on 13.04.2019.
  */
 
-import java.rmi.server.ExportException;
 import java.sql.*;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;

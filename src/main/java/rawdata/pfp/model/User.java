@@ -1,7 +1,5 @@
 package rawdata.pfp.model;
 
-//import com.sun.security.auth.UserPrincipal;//???
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import rawdata.pfp.dao.UserDAOImp;

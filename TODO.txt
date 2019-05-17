@@ -8,14 +8,12 @@ NOTES:
 
 TODO: hash function for the password
 TODO: do the javafx interface
-TODO: leave the project!!
-TODO: add the project to github!
 TODO:printing the keywords with the count of projects -- using raw query-- think about join and group by
 TODO: think about how to make the proejct link work more smoothly with the queriries
 TODO: Building JOIN Queries
 
 Think About:
-* works with the fx interface
+* work with the fx interface
 * auto-completion; get the first word starting with the input user gave ; keyword consistency
 * a way to edit the keywords later on --maybe just by the creator and participants
 

@@ -47,10 +47,12 @@ public class LoginServlet extends HttpServlet{
         System.out.println("Inside login servlet" + name);
         boolean check = controller.login(name, pass);
 
-        if (check){
-            res.sendRedirect("browse.html"); //this links the servlet!!
-        }
-        else{
+        if (check) {
+            res.sendRedirect("browse");
+            //req.setAttribute("projects", controller.getAll());
+            //System.out.println(controller.getAll().get(0));
+            //req.getRequestDispatcher("browse").forward(req, res);//this links the servlet!!
+        } else {
             res.sendRedirect("index.jsp"); //maybe?
         }
 

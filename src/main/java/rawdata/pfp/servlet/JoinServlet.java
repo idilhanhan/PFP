@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import rawdata.pfp.controller.Controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Created by idilhanhan on 11.05.2019.
@@ -17,6 +18,14 @@ import java.io.IOException;
 public class JoinServlet extends HttpServlet {
 
     Controller controller;
+
+    public JoinServlet(){
+        try {
+            controller = new Controller();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public JoinServlet(Controller controller){
         this.controller = controller;

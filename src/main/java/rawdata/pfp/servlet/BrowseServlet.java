@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -21,12 +22,21 @@ public class BrowseServlet extends HttpServlet {
 
     Controller controller;
 
+    public BrowseServlet(){
+        try {
+            controller = new Controller();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public BrowseServlet(Controller controller){
         this.controller = controller;
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{ //TODO: check if this works with get or post
 
+        System.out.println("DO GET METHOD OF BROWSE");
         List<ProjectIdea> projects = controller.getAll();
 
         req.setAttribute("projects", projects);

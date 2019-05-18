@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import rawdata.pfp.controller.Controller;
 
@@ -16,6 +17,14 @@ import rawdata.pfp.controller.Controller;
 public class SignUpServlet extends HttpServlet {
 
     Controller controller;
+
+    public SignUpServlet(){
+        try {
+            controller = new Controller();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public SignUpServlet(Controller controller){
         this.controller = controller;
@@ -29,10 +38,10 @@ public class SignUpServlet extends HttpServlet {
         boolean check = controller.signup(name, pass);
 
         if (check){
-            res.sendRedirect("login.html");
+            res.sendRedirect("login");
         }
         else{
-            res.sendRedirect("signup.html");
+            res.sendRedirect("signup");
         }
 
     }

@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * Created by idilhanhan on 11.05.2019.
  */
-@WebServlet("/join.html")
+@WebServlet("/join")
 public class JoinServlet extends HttpServlet {
 
     Controller controller;

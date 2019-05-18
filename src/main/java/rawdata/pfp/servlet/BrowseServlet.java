@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by idilhanhan on 10.05.2019.
  */
-@WebServlet("/browse.html")
+@WebServlet("/browse")
 public class BrowseServlet extends HttpServlet {
 
     Controller controller;

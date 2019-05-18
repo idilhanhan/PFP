@@ -18,10 +18,10 @@
                 <a class="nav-link" href="addProject.jsp">Add Project</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="myProjects.html">My Projects</a>
+                <a class="nav-link" href="myProjects">My Projects</a>
             </li>
         </ul>
-        <form action="search.html", method="POST", class="form-inline my-2 my-lg-0">
+        <form action="search", method="POST", class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>

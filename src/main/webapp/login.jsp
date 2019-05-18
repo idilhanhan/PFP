@@ -6,17 +6,16 @@
         <meta charset="UTF-8">
 
      </head>
-     <body>
+     <body class="text-center">
          <h1>Login</h1>
-
-         <form action="login.html", method="POST">
+         <form class="form-signin" action="login", method="post">
            <div class="form-group">
               <label>Username</label><input type="text" class="form-control" id="username" placeholder="joedoe">
            </div>
            <div class="form-group">
               <label>Password</label><input type="password" class="form-control" id="password" placeholder="password">
            </div>
-           <button type="submit" class="btn btn-primary">Submit</button>
+           <button type="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
          </form>
 
      </body>

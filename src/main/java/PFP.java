@@ -123,7 +123,7 @@ public class PFP {
                 System.out.print("Username: ");
                 String username = scan.next();
                 System.out.print("Password: ");
-                String pass = scan.next(); //TODO: hash function!!
+                String pass = scan.next(); //TODO: hash function!! ??
                 User newUser = new User(username, pass);
                 boolean success = userDAO.addUser(newUser);
                 if (success){

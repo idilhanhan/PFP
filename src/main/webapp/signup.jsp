@@ -9,7 +9,7 @@
         <body>
             <h1>Sign Up</h1>
 
-            <form action="signup.html", method="POST">
+            <form action="signup", method="POST">
               <div class="form-group">
                 <label>Username</label><input type="text" class="form-control" id="username" placeholder="joedoe">
               </div>

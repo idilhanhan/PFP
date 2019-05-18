@@ -12,7 +12,7 @@ import rawdata.pfp.controller.Controller;
 /**
  * Created by idilhanhan on 10.05.2019.
  */
-@WebServlet("/signup.html")
+@WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
 
     Controller controller;

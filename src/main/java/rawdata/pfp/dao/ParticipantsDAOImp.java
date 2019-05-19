@@ -55,14 +55,16 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
 
     }
 
-    public void leave(User participant, ProjectIdea project){
+    public boolean leave(User participant, ProjectIdea project){
+        int check = 0;
         try{
             DeleteBuilder<Participants, Integer> parDB = deleteBuilder();
             parDB.where().eq("participant_id", participant.getUserId()).and().eq("project_id", project.getIdea_id());
-            parDB.delete();
+            check = parDB.delete();
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        return check == 1;
     }
 
     public List<User> getAllParticipants(ProjectIdea project, UserDAOImp userDAO){

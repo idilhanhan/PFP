@@ -76,13 +76,15 @@ public class ProjectIdeaDAOImp extends BaseDaoImpl<ProjectIdea, Integer> impleme
      * @return true if addition is successful
      */
     @Override
-    public void addIdea(ProjectIdea newIdea) {//TODO: shouldn't this do sth about the keywords too?
+    public boolean addIdea(ProjectIdea newIdea) {//TODO: shouldn't this do sth about the keywords too?
+        int check = 0;
         try{
-            super.create(newIdea);
+            check = super.create(newIdea);
             //here add the name as the keyword and iterate through the abstract and add that as the keyword
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        return check == 1;
     }
 
 }

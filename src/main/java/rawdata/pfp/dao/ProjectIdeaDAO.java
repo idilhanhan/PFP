@@ -14,7 +14,7 @@ public interface ProjectIdeaDAO extends Dao<ProjectIdea, Integer> {
 
     ProjectIdea getProjectIdea(int id);
     List<ProjectIdea> showAll();
-    void addIdea(ProjectIdea newIdea);
+    boolean addIdea(ProjectIdea newIdea);
 
 
 }

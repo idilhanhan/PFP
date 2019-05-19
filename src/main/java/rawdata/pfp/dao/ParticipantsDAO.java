@@ -14,7 +14,7 @@ import rawdata.pfp.model.User;
  */
 public interface ParticipantsDAO extends Dao<Participants, Integer>{
     int join(User participant, ProjectIdea project);
-    void leave(User participant, ProjectIdea project);
+    boolean leave(User participant, ProjectIdea project);
     List<User> getAllParticipants(ProjectIdea project, UserDAOImp userDAO);
 
 }

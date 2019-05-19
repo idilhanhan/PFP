@@ -31,17 +31,17 @@ public class SignUpServlet extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
-        String name = req.getParameter("username");
-        String pass = req.getParameter("password");
+        String name = request.getParameter("username");
+        String pass = request.getParameter("password");
         boolean check = controller.signup(name, pass);
 
         if (check){
-            res.sendRedirect("login");
+            response.sendRedirect("login");
         }
         else{
-            res.sendRedirect("signup");
+            response.sendRedirect("signup");
         }
 
     }

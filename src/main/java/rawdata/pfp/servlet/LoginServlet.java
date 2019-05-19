@@ -6,13 +6,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletConfig;
-
+import javax.servlet.http.HttpSession;
 
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import rawdata.pfp.controller.Controller;
+import rawdata.pfp.model.User;
 
 
 /**
@@ -40,20 +41,18 @@ public class LoginServlet extends HttpServlet{
     }
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
-        String name = req.getParameter("username");
-        String pass = req.getParameter("password");
-        System.out.println("Inside login servlet" + name);
-        boolean check = controller.login(name, pass);
+        String name = request.getParameter("username");
+        String pass = request.getParameter("password");
+        User curr = controller.login(name, pass);
 
-        if (check) {
-            res.sendRedirect("browse");
-            //req.setAttribute("projects", controller.getAll());
-            //System.out.println(controller.getAll().get(0));
-            //req.getRequestDispatcher("browse").forward(req, res);//this links the servlet!!
+        if (curr != null) {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("currentUser", curr);
+            response.sendRedirect("browse");
         } else {
-            res.sendRedirect("index.jsp"); //maybe?
+            response.sendRedirect("loginError.jsp"); //create a popup to say that the user has failed
         }
 
     }

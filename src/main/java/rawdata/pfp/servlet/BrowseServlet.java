@@ -34,15 +34,24 @@ public class BrowseServlet extends HttpServlet {
         this.controller = controller;
     }
 
-    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{ //TODO: check if this works with get or post
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{ //TODO: check if this works with get or post
 
-        System.out.println("DO GET METHOD OF BROWSE");
         List<ProjectIdea> projects = controller.getAll();
-
-        req.setAttribute("projects", projects);
+        request.setAttribute("projects", projects);
 
         ServletContext servletContext = getServletContext(); //why??
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/browse.jsp");
-        requestDispatcher.forward(req, res);
+        requestDispatcher.forward(request, response);
     }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{ //TODO: check if this works with get or post
+
+        List<ProjectIdea> projects = controller.getAll();
+        request.setAttribute("projects", projects);
+
+        ServletContext servletContext = getServletContext(); //why??
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/browse.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
 }

@@ -8,14 +8,14 @@
         <title>Project Formation Platform</title>
     </head>
     <body>
-        <h1>Welcome to Project Formation Platform</h1>
 
-        <h2>This is a platform where you can share your project ideas and find other people to work with!</h2>>
-
-        <a class="btn btn-primary", href="login.jsp", role="button">Login</a>>
-
-        <a class="btn btn-primary", href="signup.jsp", role="button">SignUp</a>
-
+        <div class="jumbotron">
+          <h1 class="display-4">Welcome to Project Formation Platform</h1>
+          <p class="lead">This is a platform where you can share your project ideas and find other people to work with!</p>
+          <hr class="my-4">
+          <a class="btn btn-primary", href="login.jsp", role="button">Login</a>
+          <a class="btn btn-primary", href="signup.jsp", role="button">SignUp</a>
+        </div>
 
     </body>
 </html>

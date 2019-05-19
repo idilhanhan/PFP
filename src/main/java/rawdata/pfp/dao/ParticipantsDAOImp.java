@@ -24,7 +24,15 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
     }
 
 
-    public void join(User participant, ProjectIdea project){
+    /**
+     * Creates a new row in the Participants table, meaning the given user joins the given project
+     * @param participant
+     * @param project
+     * @return 0,1,2 - -1 if joining was unsuccesfull for reasons unknown
+     *                 1 if joining was successful
+     *
+     */
+    public int join(User participant, ProjectIdea project){
         try{
             //get the count of users that the project is linked with
             //SQL command: SELECT COUNT(participant_id) FROM participants WHERE project_id = project.getId()
@@ -32,7 +40,10 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
             //check if the number is less than the limit
 
             if (count < project.getMember_limit() || project.getMember_limit() == 0) {
-                super.create(new Participants(participant, project));
+                int check = super.create(new Participants(participant, project));
+                if ( check == 1){
+                    return 1; //join was successful
+                }
             }
             else{
                 System.out.println("Sorry, joining the project is not possible because the group reached its capacity!");
@@ -40,6 +51,7 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        return -1;
 
     }
 

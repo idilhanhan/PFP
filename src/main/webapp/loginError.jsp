@@ -6,6 +6,14 @@
         <meta charset="UTF-8">
 
      </head>
+
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Login unsuccessful!</strong> Please try again!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
      <body class="text-center">
          <h1>Login</h1>
          <form class="form-signin" action="login", method="post">

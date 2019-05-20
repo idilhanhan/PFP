@@ -49,5 +49,5 @@ public class JoinServlet extends HttpServlet {
         //response.sendRedirect("/browse");
 
 
-    } //TODO: show more information about the project?? or implement the project to string to show more details
+    }
 }

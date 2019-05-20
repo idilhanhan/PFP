@@ -28,22 +28,29 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
      * Creates a new row in the Participants table, meaning the given user joins the given project
      * @param participant
      * @param project
-     * @return 0,1,2 - -1 if joining was unsuccesfull for reasons unknown
+     * @return 0,1,2 - 0 if joining was unsuccesfull for reasons unknown
      *                 1 if joining was successful
      *
      */
     public int join(User participant, ProjectIdea project){
         try{
-            //get the count of users that the project is linked with
+            //check if the user is already in the project
+            List<Participants> myParticipation = super.queryForEq("participant_id", participant.getUserId());
+            for (Participants par : myParticipation){
+                if (par.getProject().getIdea_id()  == project.getIdea_id()){
+                    //then the user is already participating in the project
+                    System.out.println("User has already joined the project!");
+                    return 0;
+                }
+            }
+            //If here then the user is not participating in the project
+            //Get the count of users that the project is linked with
             //SQL command: SELECT COUNT(participant_id) FROM participants WHERE project_id = project.getId()
             int count = (int)(this.queryBuilder().where().eq("project_id", project.getIdea_id()).countOf());
             //check if the number is less than the limit
-
             if (count < project.getMember_limit() || project.getMember_limit() == 0) {
                 int check = super.create(new Participants(participant, project));
-                if ( check == 1){
-                    return 1; //join was successful
-                }
+                return check;
             }
             else{
                 System.out.println("Sorry, joining the project is not possible because the group reached its capacity!");
@@ -51,7 +58,7 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return -1;
+        return 0;
 
     }
 

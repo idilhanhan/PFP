@@ -41,9 +41,9 @@ public class LeaveServlet extends HttpServlet {
 
         //request.setAttribute("leaveCheck", check);
 
-        //ServletContext servletContext = getServletContext();
-       // RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/browse");
-       // requestDispatcher.forward(request, response);
-        response.sendRedirect("/browse");
+        ServletContext servletContext = getServletContext();
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/browse");
+        requestDispatcher.forward(request, response);
+       // response.sendRedirect("/browse");
     }
 }

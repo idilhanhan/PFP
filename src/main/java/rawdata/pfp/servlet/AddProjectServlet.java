@@ -36,7 +36,6 @@ public class AddProjectServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         String name = request.getParameter("projectName");
         String projectAbstract = request.getParameter("projectAbstract");
         int limit = Integer.parseInt(request.getParameter("memberLimit"));
@@ -45,14 +44,16 @@ public class AddProjectServlet extends HttpServlet {
         User currUser = (User)session.getAttribute("currentUser");
         boolean check = controller.addProject(name, projectAbstract, currUser, limit, keywords);
         if (check){
-            response.sendRedirect("myProjects");
+            ServletContext servletContext = getServletContext();
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/myProjects");
+            requestDispatcher.forward(request, response);
         }
         else{
             request.setAttribute("failure", 1);
             ServletContext servletContext = getServletContext();
-            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("addProject.jsp");
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/addProject.jsp");
             requestDispatcher.forward(request, response);
-            //response.sendRedirect("addProject.jsp");
+            response.sendRedirect("addProject.jsp");
         }
 
     }

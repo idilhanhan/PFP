@@ -44,11 +44,13 @@ public class KeywordDAOImp extends BaseDaoImpl<Keyword, Integer> implements Keyw
    }
 
     @Override
-    public void addKeyword(Keyword newWord) {
+    public boolean addKeyword(Keyword newWord) {
+       int check = 0;
         try{
-            super.create(newWord);
+            check = super.create(newWord);
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        return check == 1;
     }
 }

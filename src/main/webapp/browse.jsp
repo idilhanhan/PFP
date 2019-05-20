@@ -17,7 +17,7 @@
     <%
         if (request.getAttribute("joinCheck") != null){
             int check = (Integer)request.getAttribute("joinCheck");
-            if (check == -1){  %>
+            if (check == 0){  %>
                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                    <strong>Join unsuccessful!</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -57,10 +57,16 @@
                 <div class="card-body">
                    <h5 class="card-title">${name}</h5>
                    <p class="card-text">${info}</p>
-                   <form action="join" method="post">
-                     <input type="hidden" name="projectToJoin" value="${id}" /><%-- this is for the join page --%>
-                     <input class="btn btn-primary" type="submit" value="Join">
-                   </form>
+                   <div class="btn-group">
+                       <form action="join" method="post">
+                         <input type="hidden" name="projectToJoin" value="${id}" /><%-- this is for the join page --%>
+                         <input class="btn btn-primary" type="submit" value="Join">
+                       </form>
+                       <form action="project" method="post">
+                         <input type="hidden" name="projectID" value="${id}" /><%-- this is for the join page --%>
+                         <input class="btn btn-primary" type="submit" value="More Detail">
+                       </form>
+                   </div>
                 </div>
             </div>
         <%

@@ -48,4 +48,17 @@ public class MyProjectsServlet extends HttpServlet{
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/myProjects.jsp");
         requestDispatcher.forward(request, response);
     }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException { //TODO: check if this works with get or post
+
+        HttpSession session = request.getSession(true);
+        User currUser = (User)session.getAttribute("currentUser");
+
+        List<ProjectIdea> projects = controller.getMyProjects(currUser);
+        request.setAttribute("projects", projects);
+
+        ServletContext servletContext = getServletContext(); //why??
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/myProjects.jsp");
+        requestDispatcher.forward(request, response);
+    }
 }

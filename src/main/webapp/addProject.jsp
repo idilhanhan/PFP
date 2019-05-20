@@ -20,19 +20,20 @@
 
          <body class="text-center">
              <h1>Add Project</h1>
-             <form action="addProject">
+             <form action="addProject" method="post">
                <div class="form-group">
-                 <label for="name">Project Name</label><input type="text" class="form-control" name="projectName" placeholder="Project Doe">
+                 <label>Project Name</label><input type="text" class="form-control" name="projectName" placeholder="Project Doe">
                </div>
                <div class="form-group">
-                 <label for="abstract">Abstract</label><input type="text" class="form-control" name="projectAbstract" placeholder="Sample project">
+                 <label>Abstract</label><input type="text" class="form-control" name="projectAbstract" placeholder="Sample project">
                </div>
                <div class="form-group">
-                  <label for="limit">Member Limit</label><input type="text" class="form-control" name="memberLimit" placeholder="3">
+                  <label>Member Limit</label><input type="text" class="form-control" name="memberLimit" placeholder="3">
                </div>
                <div class="form-group">
-                 <label for="keywords">Another label</label><input type="text" class="form-control" id="keywords" placeholder="Keywords separated with space">
+                 <label>Keywords</label><input type="text" class="form-control" name="keywords" placeholder="Keywords separated with space">
                </div>
+               <button type="submit" class="btn btn-lg btn-primary btn-block">Add</button>
              </form>
          </body>
 </html>

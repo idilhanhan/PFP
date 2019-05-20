@@ -10,5 +10,5 @@ public interface KeywordDAO extends Dao<Keyword, Integer> {
 
     Keyword getKeyword(int id);
     Keyword getByWord(String keyword);
-    void addKeyword(Keyword newWord);
+    boolean addKeyword(Keyword newWord);
 }

@@ -1,4 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="rawdata.pfp.model.ProjectIdea"%>
+<%@page import="rawdata.pfp.model.User"%>
+<%@ page import="java.util.List" %>
+<%@ page import="java.lang.String" %>
 <!DOCTYPE html>
 <html>
 
@@ -11,8 +15,15 @@
 
         <jsp:include page="header.jsp" />
 
+        <%
+              User currUser = (User)session.getAttribute("currentUser");
+              String username = currUser.getUsername();
+              pageContext.setAttribute("username", username);
 
-        <h1>Project Ideas of ${session.getAttribute("currUser").getName}</h1>
+        %>
+
+
+        <h1>Project Ideas of ${username}</h1>
 
             <%
                 List<ProjectIdea> projects = (List<ProjectIdea>) request.getAttribute("projects");

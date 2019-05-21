@@ -41,7 +41,7 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("projects", projects);
 
         ServletContext servletContext = getServletContext(); //why??
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/search.jsp");
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/searchResults.jsp");
         requestDispatcher.forward(request, response);
     }
 

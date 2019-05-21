@@ -50,7 +50,7 @@ public class ProjectServlet extends HttpServlet{
         request.setAttribute("limit", limit);
 
         ServletContext servletContext = getServletContext(); //why??
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/project.jsp");
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/projectDetail.jsp");
         requestDispatcher.forward(request, response);
     }
 }

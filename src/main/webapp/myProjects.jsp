@@ -22,7 +22,6 @@
 
         %>
 
-
         <h1>Project Ideas of ${username}</h1>
 
             <%
@@ -51,9 +50,6 @@
                 </div>
             <%
                 }
-
             %>
-
         </body>
-
 </html>

@@ -27,7 +27,7 @@
            <div class="form-group">
               <label>Password</label><input type="password" class="form-control" name="password" placeholder="password" required>
            </div>
-           <button type="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+           <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
          </form>
 
      </body>

@@ -1,5 +1,6 @@
 package rawdata.pfp.controller;
 
+import com.j256.ormlite.dao.BaseDaoImpl;
 import org.apache.commons.codec.binary.Hex;
 import com.j256.ormlite.support.ConnectionSource;
 import rawdata.pfp.dao.*;
@@ -20,19 +21,29 @@ public class Controller { //see if this is necessary?
 
     //Attributes
     private DBManager dbManager;
-    private ConnectionSource mainConn;
+   //private ConnectionSource mainConn;
 
     public Controller() throws SQLException{
         dbManager = new DBManager();
-        mainConn = dbManager.connect();
+       // mainConn = dbManager.connect();
     }
 
 
     public User login(String username, String password){
         User currUser = null;
         try {
-            UserDAOImp userDAO = new UserDAOImp(mainConn);
-            currUser = userDAO.authenticate(username, password);
+            ConnectionSource conn = dbManager.connect();
+            UserDAOImp userDAO = new UserDAOImp(conn);
+            //Authenticate the name and get the stored password
+            String storedPass = userDAO.authenticateName(username, password);
+            if (storedPass != null) {
+                if (authenticate(storedPass, password)){
+                    //If here then the user is successfully logged in
+                    currUser = userDAO.getByName(username);
+                }
+            }
+            dbManager.close(conn);
+
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -41,10 +52,13 @@ public class Controller { //see if this is necessary?
 
     public boolean signup(String username, String password){
         try {
-            UserDAOImp userDAO = new UserDAOImp(mainConn);
-            //here hash the password
-            User newUser = new User(username, password);
-            return userDAO.addUser(newUser);
+            ConnectionSource conn = dbManager.connect();
+            UserDAOImp userDAO = new UserDAOImp(conn);
+            String hashed = hash(password);
+            User newUser = new User(username, hashed);
+            boolean check = userDAO.addUser(newUser);
+            dbManager.close(conn);
+            return check;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -53,28 +67,62 @@ public class Controller { //see if this is necessary?
 
     public String hash(String pass){
         try {
-            int iterations = 100;
+            int iterations = 1000;
+            int keyLength = 128;
             char[] chars = pass.toCharArray();
             //create salt
-            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            SecureRandom sr = new SecureRandom();
             byte[] salt = new byte[16];
             sr.nextBytes(salt);
 
-            PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+            PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, keyLength);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = skf.generateSecret(spec).getEncoded();
             String hashedString = Hex.encodeHexString(hash);
-            return hashedString; //not done?
+            String saltHex = Hex.encodeHexString(salt);
+            return saltHex + ":" + hashedString;
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
         return null;
     }
 
+    public boolean authenticate(String storedPass, String givenPass){
+        try {
+            int iterations = 1000;
+            int keyLength = 128;
+            String[] parts = storedPass.split(":");
+            byte[] salt = Hex.decodeHex(parts[0].toCharArray());
+            System.out.println("salt " + parts[0]);
+            byte[] hash = Hex.decodeHex(parts[1].toCharArray());
+
+            PBEKeySpec spec = new PBEKeySpec(givenPass.toCharArray(), salt, iterations, keyLength);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] testHash = skf.generateSecret(spec).getEncoded();
+            System.out.println("hashedgiven " + Hex.encodeHexString(testHash));
+
+           return equal(hash, testHash);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    private boolean equal(byte[] original, byte[] check){
+        int diff = original.length ^ check.length;
+        for (int i = 0; i < original.length && i < check.length; i++)
+            diff |= original[i] ^ check[i];
+        return diff == 0;
+    }
+
     public List<ProjectIdea> getAll(){
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            return projectDAO.showAll();
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            List<ProjectIdea> all = new ArrayList<>();
+            all = projectDAO.showAll();
+            dbManager.close(conn);
+            return all;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -83,8 +131,10 @@ public class Controller { //see if this is necessary?
 
     public String getNameAbstract(int projectID){
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
             ProjectIdea currProject = projectDAO.getProjectIdea(projectID);
+            dbManager.close(conn);
             return currProject.toString();
         } catch (SQLException e){
             System.out.println(e.getMessage());
@@ -94,10 +144,13 @@ public class Controller { //see if this is necessary?
 
     public String getCreator(int projectID){
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            UserDAOImp userDAO = new UserDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            UserDAOImp userDAO = new UserDAOImp(conn);
             ProjectIdea currProject = projectDAO.getProjectIdea(projectID);
-            return userDAO.getUser(currProject.getCreator()).getUsername();
+            String creator = userDAO.getUser(currProject.getCreator()).getUsername();
+            dbManager.close(conn);
+            return creator;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -106,15 +159,17 @@ public class Controller { //see if this is necessary?
 
     public List<String> getParticipants(int projectID){
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            UserDAOImp userDAO = new UserDAOImp(mainConn);
-            ParticipantsDAOImp parDAO = new ParticipantsDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            UserDAOImp userDAO = new UserDAOImp(conn);
+            ParticipantsDAOImp parDAO = new ParticipantsDAOImp(conn);
             ProjectIdea currProject = projectDAO.getProjectIdea(projectID);
             List<String> participantNames = new ArrayList<>();
             List<User> participants = parDAO.getAllParticipants(currProject, userDAO);
             for ( User participant : participants){
                 participantNames.add(participant.getUsername());
             }
+            dbManager.close(conn);
             return participantNames;
         } catch (SQLException e){
             System.out.println(e.getMessage());
@@ -123,10 +178,14 @@ public class Controller { //see if this is necessary?
     }
 
     public int getMemberLimit(int projectID){
+
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
             ProjectIdea currProject = projectDAO.getProjectIdea(projectID);
+            dbManager.close(conn);
             return currProject.getMember_limit();
+
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -134,24 +193,29 @@ public class Controller { //see if this is necessary?
     }
 
     public int join(int projectToJoin, User currUser){ //check this!
+
         int check = -1;
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            ParticipantsDAOImp parDAO = new ParticipantsDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            ParticipantsDAOImp parDAO = new ParticipantsDAOImp(conn);
             ProjectIdea currProject = projectDAO.getProjectIdea(projectToJoin);
             check = parDAO.join(currUser, currProject);
+            dbManager.close(conn);
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+
         return check;
     }
 
     public boolean addProject(String name, String projectAbstract, User currUser, int limit, String keywords){
 
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            IdeaKeyDAOImp ideaKeyDAO = new IdeaKeyDAOImp(mainConn);
-            KeywordDAOImp keyDAO = new KeywordDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            IdeaKeyDAOImp ideaKeyDAO = new IdeaKeyDAOImp(conn);
+            KeywordDAOImp keyDAO = new KeywordDAOImp(conn);
 
             //Create the new project and add it to the database
             ProjectIdea newIdea = new ProjectIdea(name, projectAbstract, currUser.getUserId(), limit);
@@ -170,15 +234,17 @@ public class Controller { //see if this is necessary?
                     //First enter the keywords to the database
                     Keyword tmp = new Keyword(key);
                     checkKey = keyDAO.addKeyword(tmp);
-                    //if process was unsucessful then keyword is already in the database
+                    //if process was unsuccessful then keyword is already in the database
                     if (!checkKey) {
                         tmp = keyDAO.getByWord(key);
                     }
                     //Now link the keyword with the project
                     ideaKeyDAO.link(newIdea, tmp);
                 }
+                dbManager.close(conn);
                 return true;
             }
+            dbManager.close(conn);
             return false;
         } catch (SQLException e){
             System.out.println(e.getMessage());
@@ -188,15 +254,17 @@ public class Controller { //see if this is necessary?
 
     public  List<ProjectIdea> getMyProjects(User currUser){
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            UserDAOImp userDAO = new UserDAOImp(mainConn);
-            ParticipantsDAO parDAO= new ParticipantsDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            UserDAOImp userDAO = new UserDAOImp(conn);
+            ParticipantsDAO parDAO= new ParticipantsDAOImp(conn);
 
             List<Participants> projectsFromPar = parDAO.queryForEq("participant_id", currUser.getUserId()); //TODO??
             List<ProjectIdea> myProjects = new ArrayList<ProjectIdea>();
             for (Participants projectFromPar : projectsFromPar) {
                 myProjects.add(projectDAO.getProjectIdea(projectFromPar.getProject().getIdea_id()));
             }
+            dbManager.close(conn);
             return myProjects;
 
         } catch (SQLException e){
@@ -208,33 +276,40 @@ public class Controller { //see if this is necessary?
     public boolean leave(int projectToLeave, User currUser){ //check this!
         boolean check = false;
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            ParticipantsDAOImp parDAO = new ParticipantsDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            ParticipantsDAOImp parDAO = new ParticipantsDAOImp(conn);
             ProjectIdea currProject = projectDAO.getProjectIdea(projectToLeave);
             check = parDAO.leave(currUser, currProject);
+            dbManager.close(conn);
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
         return check;
     }
 
-    public List<ProjectIdea> search(String search){
+    public List<ProjectIdea> search(String search){ //
         try {
-            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(mainConn);
-            IdeaKeyDAOImp ideaKeyDAO = new IdeaKeyDAOImp(mainConn);
-            KeywordDAOImp keyDAO = new KeywordDAOImp(mainConn);
+            ConnectionSource conn = dbManager.connect();
+            ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
+            IdeaKeyDAOImp ideaKeyDAO = new IdeaKeyDAOImp(conn);
+            KeywordDAOImp keyDAO = new KeywordDAOImp(conn);
 
-            Set<ProjectIdea> projectsInSet = new HashSet<ProjectIdea>();
+            Set<ProjectIdea> projectsInSet = new HashSet<ProjectIdea>();//projects in set to avoid duplicate
             String[] keys = search.split(" ");
+            List<Keyword> keywords = new ArrayList<>();
             for (String key : keys) {
-                projectsInSet.addAll(ideaKeyDAO.search(keyDAO.getByWord(key), projectDAO));
+                Keyword wordToSearch = keyDAO.getByWord(key);
+                keywords.add(wordToSearch);
             }
+            projectsInSet.addAll(ideaKeyDAO.search(keywords, projectDAO));
             List<ProjectIdea> projects = new ArrayList<>(projectsInSet);
-            //Collections.addAll(projects, projectsInSet); //TODO: CHECK
+            dbManager.close(conn);
             return projects;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
         return null;
     }
+
 }

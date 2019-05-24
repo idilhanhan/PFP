@@ -14,9 +14,9 @@
 
         <jsp:include page="header.jsp" />
 
-        <h1>Search Results</h1>
-
           <%
+             String searchKeywords = (String) request.getAttribute("searchKeywords");
+
              List<ProjectIdea> projects = (List<ProjectIdea>) request.getAttribute("projects");
 
              for (ProjectIdea project : projects){
@@ -28,6 +28,8 @@
                 int id = project.getIdea_id();
                 pageContext.setAttribute("id", id);
           %>
+
+          <h1>Search Results for ${searchKeywords}</h1>
 
              <div class="card">
                 <h5 class="card-header">Project Idea</h5>

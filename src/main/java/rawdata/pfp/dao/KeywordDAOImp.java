@@ -36,7 +36,9 @@ public class KeywordDAOImp extends BaseDaoImpl<Keyword, Integer> implements Keyw
    public Keyword getByWord(String keyword){ //TODO:use this for the search functionality where you only have the keywords in string form
        try{
            List<Keyword> result = super.queryForEq("word", keyword);
-           return (Keyword)result.get(0);
+           if (result.size() > 0) {
+               return (Keyword) result.get(0);
+           }
        } catch(SQLException e){
            System.out.println(e.getMessage());
        }

@@ -15,5 +15,5 @@ public interface UserDAO extends Dao<User, Integer>{
     List<User> showAll() throws IOException;
     User getByName(String name);
     boolean addUser(User newUser);
-    User authenticate(String username, String pass);
+    String authenticateName(String username, String pass);
 }

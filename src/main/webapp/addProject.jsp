@@ -7,6 +7,8 @@
 
          </head>
 
+         <jsp:include page="header.jsp" />
+
          <%
              if (request.getAttribute("failure") != null){%>
                <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -22,16 +24,16 @@
              <h1>Add Project</h1>
              <form action="addProject" method="post">
                <div class="form-group">
-                 <label>Project Name</label><input type="text" class="form-control" name="projectName" placeholder="Project Doe">
+                 <label>Project Name</label><input type="text" class="form-control" name="projectName" placeholder="Project Doe" required>
                </div>
                <div class="form-group">
-                 <label>Abstract</label><input type="text" class="form-control" name="projectAbstract" placeholder="Sample project">
+                 <label>Abstract</label><input type="text" class="form-control" name="projectAbstract" placeholder="Sample project" required>
                </div>
                <div class="form-group">
-                  <label>Member Limit</label><input type="text" class="form-control" name="memberLimit" placeholder="3">
+                  <label>Member Limit</label><input type="text" class="form-control" name="memberLimit" placeholder="3" required>
                </div>
                <div class="form-group">
-                 <label>Keywords</label><input type="text" class="form-control" name="keywords" placeholder="Keywords separated with space">
+                 <label>Keywords</label><input type="text" class="form-control" name="keywords" placeholder="Keywords separated with space" required>
                </div>
                <button type="submit" class="btn btn-lg btn-primary btn-block">Add</button>
              </form>

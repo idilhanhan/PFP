@@ -32,10 +32,12 @@ public class IdeaKeyDAOImp extends BaseDaoImpl<IdeaKey, Integer> implements Idea
     }
 
 
-    public List<ProjectIdea> search(Keyword keyword, ProjectIdeaDAOImp projectDAO) {
+    public List<ProjectIdea> search(List<Keyword> keywords, ProjectIdeaDAOImp projectDAO) {
+        //﻿SELECT * FROM project_idea LEFT JOIN idea_keywords ON project_idea.idea_id = idea_keywords.pro_idea_id
+        //                                                  WHERE idea_keywords.word_iD IN (...);
         try{
             QueryBuilder<IdeaKey, Integer> ideaKeyQB = this.queryBuilder();
-            ideaKeyQB.where().eq("word_id", keyword.getID());
+            ideaKeyQB.where().in("word_id", keywords);
             QueryBuilder<ProjectIdea, Integer> projectQB = projectDAO.queryBuilder();
             return (projectQB.join(ideaKeyQB).query());
         } catch(SQLException e){
@@ -46,9 +48,6 @@ public class IdeaKeyDAOImp extends BaseDaoImpl<IdeaKey, Integer> implements Idea
 
     //TODO: think about how the search function will work
     //TODO:ADD OVERRIDE TAG TO EVERY RELEVANT PLACE
-
-    //public ProjectIdea getProject(IdeaKey ideaKey){
-    //    return ideaKey.getProject();
-    //}
+    
 
 }

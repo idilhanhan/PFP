@@ -1,16 +1,16 @@
 package rawdata.pfp.servlet;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpSession;
 
 
-import java.io.IOException;
-import java.sql.SQLException;
 
 import rawdata.pfp.controller.Controller;
 import rawdata.pfp.model.User;
@@ -34,11 +34,8 @@ public class LoginServlet extends HttpServlet{
 
     public LoginServlet(Controller controller){
         this.controller = controller;
-    } //what can ı do with this?? check inject*/
-
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
     }
+
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

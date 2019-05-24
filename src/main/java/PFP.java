@@ -2,10 +2,12 @@
  * Created by idilhanhan on 6.04.2019.
  */
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.*;
 
 import com.j256.ormlite.support.ConnectionSource;
+import rawdata.pfp.controller.Controller;
 import rawdata.pfp.dao.DBManager;
 import rawdata.pfp.model.Keyword;
 import rawdata.pfp.model.Participants;
@@ -87,6 +89,9 @@ public class PFP {
 
         Scanner scan = new Scanner( System.in);
 
+        Controller cont = new Controller();
+        System.out.println(cont.hash("test"));
+
         //1. Connect to the database
         DBManager db = new DBManager();
         ConnectionSource mainConn = db.connect();
@@ -108,7 +113,14 @@ public class PFP {
                 String username = scan.next();
                 System.out.print("Password: ");
                 String pass = scan.next();
-                currUser = userDAO.authenticate(username, pass);
+                String storedPass = userDAO.authenticateName(username, pass);
+                System.out.println("stored pass " + storedPass);
+                if (storedPass != null) {
+                    if (cont.authenticate(storedPass, pass)){
+                        //If here then the user is successfully logged in
+                        currUser = userDAO.getByName(username);
+                    }
+                }
                 if (currUser != null){
                     System.out.println("Welcome Back!");
                     break;

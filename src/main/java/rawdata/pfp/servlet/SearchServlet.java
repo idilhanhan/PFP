@@ -39,6 +39,7 @@ public class SearchServlet extends HttpServlet {
 
         List<ProjectIdea> projects = controller.search(search);
         request.setAttribute("projects", projects);
+        request.setAttribute("searchKeywords", search);
 
         ServletContext servletContext = getServletContext(); //why??
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/searchResults.jsp");

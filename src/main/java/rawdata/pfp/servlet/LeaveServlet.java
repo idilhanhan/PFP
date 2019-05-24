@@ -19,9 +19,10 @@ import java.sql.SQLException;
  */
 @WebServlet("/leave")
 public class LeaveServlet extends HttpServlet {
+
     Controller controller;
 
-    public LeaveServlet(){
+   public LeaveServlet(){
         try {
             controller = new Controller();
         } catch (SQLException e){

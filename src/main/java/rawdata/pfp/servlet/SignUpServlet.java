@@ -1,5 +1,7 @@
 package rawdata.pfp.servlet;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,11 +39,16 @@ public class SignUpServlet extends HttpServlet {
         String pass = request.getParameter("password");
         boolean check = controller.signup(name, pass);
 
+        request.setAttribute("signUp", check);
+        ServletContext servletContext = getServletContext();
+
         if (check){
-            response.sendRedirect("login");
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/login");
+            requestDispatcher.forward(request, response);
         }
         else{
-            response.sendRedirect("signup");
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/signup.jsp");
+            requestDispatcher.forward(request, response);
         }
 
     }

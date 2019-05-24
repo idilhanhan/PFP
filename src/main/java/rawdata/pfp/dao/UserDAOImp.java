@@ -15,8 +15,6 @@ import com.j256.ormlite.support.ConnectionSource;
  */
 public class UserDAOImp extends BaseDaoImpl<User, Integer> implements UserDAO {
 
-    //private final static String TABLENAME = "user"; //if static was not there,
-                                                        // it couldn't have called the super with TABLENAME
 
     public UserDAOImp(ConnectionSource conn) throws SQLException{
         super(conn, User.class);
@@ -50,7 +48,9 @@ public class UserDAOImp extends BaseDaoImpl<User, Integer> implements UserDAO {
         //String sql = "SELECT * FROM user WHERE user_name = ?";
         try{
             List<User> result = super.queryForEq("user_name", user_name);
-            return (User)result.get(0);
+            if (result.size() > 0) {
+                return (User) result.get(0);
+            }
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
@@ -59,11 +59,13 @@ public class UserDAOImp extends BaseDaoImpl<User, Integer> implements UserDAO {
 
     @Override
     public boolean addUser(User newUser) { //why object?
+        System.out.println(newUser.getPassword());
         try{
             int check = super.create(newUser);
             return check == 1;
         } catch(SQLException e){
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -87,13 +89,12 @@ public class UserDAOImp extends BaseDaoImpl<User, Integer> implements UserDAO {
 
     }
 
-    public User authenticate(String name, String pass){
+    public String authenticateName(String name, String pass){
         User current = this.getByName(name);
-        if(pass.equals(current.getPassword())){
-            return current;
+        if( current != null){
+            return current.getPassword();
         }
         return null;
     }
 
-    public void update(){}
 }

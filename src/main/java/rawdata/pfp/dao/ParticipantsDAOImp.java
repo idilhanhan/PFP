@@ -28,11 +28,13 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
      * Creates a new row in the Participants table, meaning the given user joins the given project
      * @param participant
      * @param project
-     * @return 0,1,2 - 0 if joining was unsuccesfull for reasons unknown
+     * @return 0,1,2 - 0 if joining was unssuccesfull for reasons unknown
      *                 1 if joining was successful
+     *                 2 if joining was unssuccesfull because the user is already a participant
+     *                 3 if joining was unssuccesfull because the limit for the participants is reached
      *
      */
-    public int join(User participant, ProjectIdea project){
+    public int join(User participant, ProjectIdea project){ //TODO:there is an error!! -- report!!
         try{
             //check if the user is already in the project
             List<Participants> myParticipation = super.queryForEq("participant_id", participant.getUserId());
@@ -40,7 +42,7 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
                 if (par.getProject().getIdea_id()  == project.getIdea_id()){
                     //then the user is already participating in the project
                     System.out.println("User has already joined the project!");
-                    return 0;
+                    return 2;
                 }
             }
             //If here then the user is not participating in the project
@@ -54,6 +56,7 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
             }
             else{
                 System.out.println("Sorry, joining the project is not possible because the group reached its capacity!");
+                return 3;
             }
         } catch(SQLException e){
             System.out.println(e.getMessage());
@@ -76,12 +79,12 @@ public class ParticipantsDAOImp extends BaseDaoImpl<Participants, Integer> imple
 
     public List<User> getAllParticipants(ProjectIdea project, UserDAOImp userDAO){
         try{
+            //﻿SELECT * FROM user LEFT JOIN participants ON user.user_id = participants.participant_id WHERE participants.project_id = ..;
             QueryBuilder<Participants, Integer> parQB = this.queryBuilder();
             parQB.where().eq("project_id", project.getIdea_id());
             QueryBuilder<User, Integer> userQB = userDAO.queryBuilder();
             return userQB.join(parQB).query();
-            //System.out.println("inside getALL: " + this.queryForEq("project_id", project.getIdea_id()));
-           // return this.queryForEq("project_id", project.getIdea_id());
+
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }

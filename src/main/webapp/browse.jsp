@@ -33,6 +33,23 @@
                       </button>
                   </div>
             <%}
+            else if ( check == 2){  %>
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                       <strong>Join unsuccessful! You are already participating in the project! </strong>
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                       </button>
+                  </div>
+            <%}
+            else if ( check == 3){  %>
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Join unsuccessful! This project is not accepting any more participants! </strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                        </button>
+                  </div>
+            <%}
+
         }
     %>
 

@@ -58,9 +58,6 @@
             <version>1.9</version>
         </dependency>
 
-
-
-
     </dependencies>
 
     <build>
@@ -87,12 +84,8 @@
                 </configuration>
             </plugin>
 
-
-
         </plugins>
 
     </build>
-
-
 
 </project>

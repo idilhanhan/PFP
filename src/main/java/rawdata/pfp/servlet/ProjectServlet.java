@@ -59,6 +59,8 @@ public class ProjectServlet extends HttpServlet{
         int limit = controller.getMemberLimit(projectID);
         request.setAttribute("limit", limit);
 
+        request.setAttribute("projectID", projectID);
+
         ServletContext servletContext = getServletContext(); //why??
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/projectDetail.jsp");
         requestDispatcher.forward(request, response);

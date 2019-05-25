@@ -57,7 +57,7 @@ public class AddProjectServlet extends HttpServlet {
         boolean check = controller.addProject(name, projectAbstract, currUser, limit, keywords);
         if (check){
             ServletContext servletContext = getServletContext();
-            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/myProjects");
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/brpwse");
             requestDispatcher.forward(request, response);
         }
         else{

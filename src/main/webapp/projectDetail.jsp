@@ -23,6 +23,9 @@
 
         int limit = (Integer)request.getAttribute("limit");
         pageContext.setAttribute("limit", limit);
+
+        int id = (Integer)request.getAttribute("projectID");
+        pageContext.setAttribute("id", id);
     %>
 
     <div class="card">

@@ -113,7 +113,7 @@ public class PFP {
                 String username = scan.next();
                 System.out.print("Password: ");
                 String pass = scan.next();
-                String storedPass = userDAO.authenticateName(username, pass);
+                String storedPass = userDAO.authenticateName(username);
                 System.out.println("stored pass " + storedPass);
                 if (storedPass != null) {
                     if (cont.authenticate(storedPass, pass)){
@@ -174,10 +174,12 @@ public class PFP {
                     String sentence = scan.nextLine();
                     Set<ProjectIdea> projects= new HashSet<ProjectIdea>();
                     String [] keys = sentence.split(" ");
+                    List<Keyword> keywords = new ArrayList<>();
                     for (String key : keys){
-                        System.out.println("inside for--" + key);
-                        projects.addAll(ideaKeyDAO.search(keyDAO.getByWord(key), projectDAO));
+                        Keyword wordToSearch = keyDAO.getByWord(key);
+                        keywords.add(wordToSearch);
                     }
+                    projects.addAll(ideaKeyDAO.search(keywords, projectDAO));
                     //Print all of the projects
                     for (ProjectIdea project : projects){
                         System.out.println(project);

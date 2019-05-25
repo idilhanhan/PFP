@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import rawdata.pfp.dao.ProjectIdeaDAOImp;
 
 /**
+ * The Model class for the ProjectIdea entity
  * Created by idilhanhan on 6.04.2019.
  */
 
@@ -64,5 +65,4 @@ public class ProjectIdea {
         return "Project " + idea_id + ": " + name + ": " + project_abstract ;
     }
 
-    //equals method?
 }

@@ -1,6 +1,5 @@
 package rawdata.pfp.dao;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +11,9 @@ import com.j256.ormlite.support.ConnectionSource;
 import rawdata.pfp.model.ProjectIdea;
 
 
-
 /**
+ * Implementation for the Data Access Object of ProjectIdea Object
+ * Extends the BaseDAOImpl class from ormlite package
  * Created by idilhanhan on 13.04.2019.
  */
 public class ProjectIdeaDAOImp extends BaseDaoImpl<ProjectIdea, Integer> implements ProjectIdeaDAO{
@@ -24,9 +24,9 @@ public class ProjectIdeaDAOImp extends BaseDaoImpl<ProjectIdea, Integer> impleme
     }
 
     /**
-     * Method that returns a project idea object with given id
+     * Method that returns the Project Idea with the given ID
      * @param id
-     * @return ProjectIdea
+     * @return ProjectIdea object
      */
     public ProjectIdea getProjectIdea(int id){
         //String sql = "SELECT * FROM project_idea WHERE idea_id = ?";
@@ -41,18 +41,12 @@ public class ProjectIdeaDAOImp extends BaseDaoImpl<ProjectIdea, Integer> impleme
 
 
     /**
-     * Method that prints all of the project ideas in the database
+     * Method that returns a List of all of the Project Ideas in the database
      */
     public List<ProjectIdea> showAll(){
-/*
-
-        GenericRawResults<String[]> rawResults = this.queryRaw("SELECT idea_id, name, abstract  FROM project_idea");
-        List<String[]> results = rawResults.getResults();
-        System.out.println(results.get(0));*/
         try {
             List<ProjectIdea> result = new ArrayList<ProjectIdea>();
-            CloseableIterator<ProjectIdea> itr = this.closeableIterator();
-            //System.out.println(itr.current());
+            CloseableIterator<ProjectIdea> itr = super.closeableIterator();
             try {
                 while (itr.hasNext()) {
                     ProjectIdea tmp = itr.next();
@@ -68,19 +62,16 @@ public class ProjectIdeaDAOImp extends BaseDaoImpl<ProjectIdea, Integer> impleme
         }
     }
 
-   //function for more detail
-
     /**
-     * Method that inserts a new idea to the database with the given name, abstract and creator
+     * Method that adds a the given Project Idea to the database
      * @param newIdea
      * @return true if addition is successful
      */
     @Override
-    public boolean addIdea(ProjectIdea newIdea) {//TODO: shouldn't this do sth about the keywords too?
+    public boolean addIdea(ProjectIdea newIdea) {
         int check = 0;
         try{
             check = super.create(newIdea);
-            //here add the name as the keyword and iterate through the abstract and add that as the keyword
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }

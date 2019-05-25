@@ -1,41 +1,48 @@
 package rawdata.pfp.controller;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-import org.apache.commons.codec.binary.Hex;
-import com.j256.ormlite.support.ConnectionSource;
-import rawdata.pfp.dao.*;
-import rawdata.pfp.model.*;
-
-import javax.servlet.annotation.WebServlet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 import java.sql.SQLException;
-import java.util.*;
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
 
+import org.apache.commons.codec.binary.Hex;
+import com.j256.ormlite.support.ConnectionSource;
+
+import rawdata.pfp.dao.*;
+import rawdata.pfp.model.*;
+
 
 /**
+ * Controller class of PFP
  * Created by idilhanhan on 10.05.2019.
  */
-public class Controller { //see if this is necessary?
+public class Controller {
 
     //Attributes
     private DBManager dbManager;
-   //private ConnectionSource mainConn;
 
     public Controller() throws SQLException{
         dbManager = new DBManager();
-       // mainConn = dbManager.connect();
     }
 
-
+    /**
+     * Method that logins the User with given name and password to PFP
+     * @param username
+     * @param password
+     * @return User object, null if login is unsuccessful
+     */
     public User login(String username, String password){
         User currUser = null;
         try {
             ConnectionSource conn = dbManager.connect();
             UserDAOImp userDAO = new UserDAOImp(conn);
             //Authenticate the name and get the stored password
-            String storedPass = userDAO.authenticateName(username, password);
+            String storedPass = userDAO.authenticateName(username);
             if (storedPass != null) {
                 if (authenticate(storedPass, password)){
                     //If here then the user is successfully logged in
@@ -50,6 +57,12 @@ public class Controller { //see if this is necessary?
         return currUser;
     }
 
+    /**
+     * Method that signs up a new User to PFP with the given name and password
+     * @param username
+     * @param password
+     * @return true if the User is successfully signed up
+     */
     public boolean signup(String username, String password){
         try {
             ConnectionSource conn = dbManager.connect();
@@ -65,6 +78,11 @@ public class Controller { //see if this is necessary?
         return false;
     }
 
+    /**
+     * Method that hashes the given password
+     * @param pass
+     * @return Hashed password
+     */
     public String hash(String pass){
         try {
             int iterations = 1000;
@@ -87,19 +105,23 @@ public class Controller { //see if this is necessary?
         return null;
     }
 
+    /**
+     * Method that checks if the given passwords are the same
+     * @param storedPass
+     * @param givenPass
+     * @return true if the given passwords are the same
+     */
     public boolean authenticate(String storedPass, String givenPass){
         try {
             int iterations = 1000;
             int keyLength = 128;
             String[] parts = storedPass.split(":");
             byte[] salt = Hex.decodeHex(parts[0].toCharArray());
-            System.out.println("salt " + parts[0]);
             byte[] hash = Hex.decodeHex(parts[1].toCharArray());
 
             PBEKeySpec spec = new PBEKeySpec(givenPass.toCharArray(), salt, iterations, keyLength);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] testHash = skf.generateSecret(spec).getEncoded();
-            System.out.println("hashedgiven " + Hex.encodeHexString(testHash));
 
            return equal(hash, testHash);
         }catch (Exception e){
@@ -108,6 +130,12 @@ public class Controller { //see if this is necessary?
         return false;
     }
 
+    /**
+     * Method that checks if two byte arrays are the same
+     * @param original
+     * @param check
+     * @return true if the given arrays are the same
+     */
     private boolean equal(byte[] original, byte[] check){
         int diff = original.length ^ check.length;
         for (int i = 0; i < original.length && i < check.length; i++)
@@ -115,6 +143,10 @@ public class Controller { //see if this is necessary?
         return diff == 0;
     }
 
+    /**
+     * Method that returns all of the Project Ideas present in the application
+     * @return List of Project Ideas, null if no project is in the application
+     */
     public List<ProjectIdea> getAll(){
         try {
             ConnectionSource conn = dbManager.connect();
@@ -129,6 +161,11 @@ public class Controller { //see if this is necessary?
         return null;
     }
 
+    /**
+     * Method that returns the name and abstract of the Project Idea with given ID
+     * @param projectID
+     * @return Name and Abstract of the ProjectIdea, null if such project does not exist
+     */
     public String getNameAbstract(int projectID){
         try {
             ConnectionSource conn = dbManager.connect();
@@ -139,9 +176,14 @@ public class Controller { //see if this is necessary?
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        return "";
+        return null;
     }
 
+    /**
+     * Method that returns the name of the User who created the Project Idea with the given ID
+     * @param projectID
+     * @return Name of the Creator
+     */
     public String getCreator(int projectID){
         try {
             ConnectionSource conn = dbManager.connect();
@@ -154,9 +196,14 @@ public class Controller { //see if this is necessary?
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        return "";
+        return null;
     }
 
+    /**
+     * Method that returns a list of the names of every User that is participating in the Project with the given ID
+     * @param projectID
+     * @return List of User names, null if no one is participating in the project
+     */
     public List<String> getParticipants(int projectID){
         try {
             ConnectionSource conn = dbManager.connect();
@@ -177,6 +224,10 @@ public class Controller { //see if this is necessary?
         return null;
     }
 
+    /**
+     * Method that return the maximum number of participants for the Project with the given ID
+     * @return An int value representing the member limit of the Project
+     */
     public int getMemberLimit(int projectID){
 
         try {
@@ -192,9 +243,17 @@ public class Controller { //see if this is necessary?
         return 0;
     }
 
-    public int join(int projectToJoin, User currUser){ //check this!
-
-        int check = -1;
+    /**
+     * Method that allows the given User to join the Project Idea with the given ID.
+     * @param projectToJoin
+     * @param currUser
+     * @return 0,1,2, 3 - 0 if joining was unsuccessful for reasons unknown
+     *                    1 if joining was successful
+     *                    2 if joining was unsuccessful because the user is already a participant
+     *                    3 if joining was unsuccessful because the limit for the participants is reached
+     */
+    public int join(int projectToJoin, User currUser){
+        int check = 0;
         try {
             ConnectionSource conn = dbManager.connect();
             ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
@@ -205,10 +264,18 @@ public class Controller { //see if this is necessary?
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
-
         return check;
     }
 
+    /**
+     * Method that adds the Project Idea with the given name, abstract, creator, member limit and keywrods to PFP
+     * @param name
+     * @param projectAbstract
+     * @param currUser
+     * @param limit
+     * @param keywords
+     * @return true if Project Idea is successfully added to PFP
+     */
     public boolean addProject(String name, String projectAbstract, User currUser, int limit, String keywords){
 
         try {
@@ -231,11 +298,12 @@ public class Controller { //see if this is necessary?
                 Collections.addAll(keys, keysWithDuplicate);
                 boolean checkKey = true;
                 for (String key : keys) {
-                    //First enter the keywords to the database
+                    //First try to add the keywords to the database
                     Keyword tmp = new Keyword(key);
                     checkKey = keyDAO.addKeyword(tmp);
                     //if process was unsuccessful then keyword is already in the database
                     if (!checkKey) {
+                        //In that case get the Keyword from the database
                         tmp = keyDAO.getByWord(key);
                     }
                     //Now link the keyword with the project
@@ -252,28 +320,33 @@ public class Controller { //see if this is necessary?
         return false;
     }
 
+    /**
+     * Method that returns a List of the Project Ideas the given User is participating in
+     * @param currUser
+     * @return List of Project Ideas, null if the User is not participating in any project
+     */
     public  List<ProjectIdea> getMyProjects(User currUser){
         try {
             ConnectionSource conn = dbManager.connect();
             ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
-            UserDAOImp userDAO = new UserDAOImp(conn);
-            ParticipantsDAO parDAO= new ParticipantsDAOImp(conn);
+            ParticipantsDAOImp parDAO= new ParticipantsDAOImp(conn);
 
-            List<Participants> projectsFromPar = parDAO.queryForEq("participant_id", currUser.getUserId()); //TODO??
-            List<ProjectIdea> myProjects = new ArrayList<ProjectIdea>();
-            for (Participants projectFromPar : projectsFromPar) {
-                myProjects.add(projectDAO.getProjectIdea(projectFromPar.getProject().getIdea_id()));
-            }
+            List<ProjectIdea> myProjects = parDAO.getMyProjects(currUser.getUserId(), projectDAO);
             dbManager.close(conn);
             return myProjects;
-
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
         return null;
     }
 
-    public boolean leave(int projectToLeave, User currUser){ //check this!
+    /**
+     * Method allows the given User to leave the Project Idea with the given ID.
+     * @param projectToLeave
+     * @param currUser
+     * @return true if the User successfully left the Project Idea
+     */
+    public boolean leave(int projectToLeave, User currUser){
         boolean check = false;
         try {
             ConnectionSource conn = dbManager.connect();
@@ -288,24 +361,35 @@ public class Controller { //see if this is necessary?
         return check;
     }
 
-    public List<ProjectIdea> search(String search){ //
+    /**
+     * Method that returns all of the Projects that are related to the given searchKey
+     * @param searchKey
+     * @return List of Project Ideas, null there are no projects related to the given searchKey
+     */
+    public List<ProjectIdea> search(String searchKey){
         try {
             ConnectionSource conn = dbManager.connect();
             ProjectIdeaDAOImp projectDAO = new ProjectIdeaDAOImp(conn);
             IdeaKeyDAOImp ideaKeyDAO = new IdeaKeyDAOImp(conn);
             KeywordDAOImp keyDAO = new KeywordDAOImp(conn);
 
-            Set<ProjectIdea> projectsInSet = new HashSet<ProjectIdea>();//projects in set to avoid duplicate
-            String[] keys = search.split(" ");
+            String[] keys = searchKey.split(" ");
             List<Keyword> keywords = new ArrayList<>();
             for (String key : keys) {
                 Keyword wordToSearch = keyDAO.getByWord(key);
-                keywords.add(wordToSearch);
+                if (wordToSearch != null) {
+                    keywords.add(wordToSearch);
+                }
             }
-            projectsInSet.addAll(ideaKeyDAO.search(keywords, projectDAO));
-            List<ProjectIdea> projects = new ArrayList<>(projectsInSet);
+            if (keywords != null) {
+                //Add the projects in set to avoid duplicate
+                Set<ProjectIdea> projectsInSet = new HashSet<ProjectIdea>();
+                projectsInSet.addAll(ideaKeyDAO.search(keywords, projectDAO));
+                List<ProjectIdea> projects = new ArrayList<>(projectsInSet);
+                dbManager.close(conn);
+                return projects;
+            }
             dbManager.close(conn);
-            return projects;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }

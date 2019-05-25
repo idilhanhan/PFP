@@ -1,14 +1,17 @@
 package rawdata.pfp.dao;
 
-import com.j256.ormlite.support.ConnectionSource;
-import rawdata.pfp.model.Keyword;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
-
 import java.sql.SQLException;
 import java.util.List;
 
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.dao.BaseDaoImpl;
+
+import rawdata.pfp.model.Keyword;
+
+
 /**
+ * Implementation for the Data Access Object of Keyword Object
+ * Extends the BaseDAOImpl class from ormlite package
  * Created by idilhanhan on 13.04.2019.
  */
 public class KeywordDAOImp extends BaseDaoImpl<Keyword, Integer> implements KeywordDAO {
@@ -19,7 +22,7 @@ public class KeywordDAOImp extends BaseDaoImpl<Keyword, Integer> implements Keyw
     }
 
     /**
-     * Method that gets the keyword associated with the given id
+     * Method that gets the Keyword with the given ID
      * @param id
      * @return Keyword object
      */
@@ -33,9 +36,14 @@ public class KeywordDAOImp extends BaseDaoImpl<Keyword, Integer> implements Keyw
         return null;
     }
 
-   public Keyword getByWord(String keyword){ //TODO:use this for the search functionality where you only have the keywords in string form
+    /**
+     * Method that returns the Keyword related to given word
+     * @param keyword
+     * @return Keyword object, null if there are not Keywords related to given word
+     */
+   public Keyword getByWord(String keyword){
        try{
-           List<Keyword> result = super.queryForEq("word", keyword);
+           List<Keyword> result = super.query(super.queryBuilder().where().like("word", keyword).prepare());
            if (result.size() > 0) {
                return (Keyword) result.get(0);
            }
@@ -45,6 +53,11 @@ public class KeywordDAOImp extends BaseDaoImpl<Keyword, Integer> implements Keyw
        return null;
    }
 
+    /**
+     * Method that adds a new Keyword to the database
+     * @param newWord
+     * @return true if Keyword is successfully added
+     */
     @Override
     public boolean addKeyword(Keyword newWord) {
        int check = 0;

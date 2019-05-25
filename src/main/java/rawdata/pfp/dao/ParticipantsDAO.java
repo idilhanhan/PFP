@@ -10,6 +10,7 @@ import rawdata.pfp.model.User;
 
 
 /**
+ * Interface for the Data Access Object of Participants object
  * Created by idilhanhan on 5.05.2019.
  */
 public interface ParticipantsDAO extends Dao<Participants, Integer>{

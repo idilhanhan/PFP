@@ -4,6 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import rawdata.pfp.model.Keyword;
 
 /**
+ * Interface for the Data Access Object of Keyword object
  * Created by idilhanhan on 4.05.2019.
  */
 public interface KeywordDAO extends Dao<Keyword, Integer> {

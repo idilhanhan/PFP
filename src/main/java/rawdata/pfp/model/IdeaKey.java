@@ -2,11 +2,14 @@ package rawdata.pfp.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import rawdata.pfp.dao.IdeaKeyDAOImp;
 
 /**
- * Created by idilhanhan on 5.05.2019.
+ * The Model class for the IdeaKey table in the database
+ * This table represents the many-to-many relationship between Keyword and Project Idea
+ * Created by idilhanhan on 6.04.2019.
  */
-@DatabaseTable(tableName = "idea_keywords")
+@DatabaseTable(tableName = "idea_keywords", daoClass = IdeaKeyDAOImp.class)
 public class IdeaKey {
 
     //Attributes

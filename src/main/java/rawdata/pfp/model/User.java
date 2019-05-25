@@ -2,9 +2,11 @@ package rawdata.pfp.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
 import rawdata.pfp.dao.UserDAOImp;
 
 /**
+ * The Model class for the User entity
  * Created by idilhanhan on 6.04.2019.
  */
 @DatabaseTable(tableName="user", daoClass = UserDAOImp.class)

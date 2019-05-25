@@ -1,12 +1,9 @@
-/**
- * Created by idilhanhan on 6.04.2019.
- */
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.*;
 
 import com.j256.ormlite.support.ConnectionSource;
+
 import rawdata.pfp.controller.Controller;
 import rawdata.pfp.dao.DBManager;
 import rawdata.pfp.model.Keyword;
@@ -15,11 +12,13 @@ import rawdata.pfp.model.ProjectIdea;
 import rawdata.pfp.model.User;
 import rawdata.pfp.dao.*;
 
+/**
+ * Created by idilhanhan on 6.04.2019.
+ */
 public class PFP {
 
     /**
-     *
-     * @param
+     * Method that prints the loginMenu
      */
     private static void loginMenu(){
         System.out.println("1. Login");
@@ -29,8 +28,7 @@ public class PFP {
     }
 
     /**
-     *
-     * THIS WILL ALSO INCLUDE SEARCH!!
+     * Method that prints the MainMenu
      */
     private static void menu(){
         System.out.println("1. Browse Project Ideas");
@@ -41,7 +39,6 @@ public class PFP {
         System.out.print("Please enter the number of the operation of your choice: "); //TODO
     }
 
-    public static void addKeyword(){};
 
     private static void showProjects(List<ProjectIdea> projects){
         for (ProjectIdea project : projects){

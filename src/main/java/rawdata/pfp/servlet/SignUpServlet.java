@@ -1,5 +1,8 @@
 package rawdata.pfp.servlet;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -7,12 +10,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
 
 import rawdata.pfp.controller.Controller;
 
 /**
+ * Servlet for the SignUp page of PFP
  * Created by idilhanhan on 10.05.2019.
  */
 @WebServlet("/signup")
@@ -32,6 +34,16 @@ public class SignUpServlet extends HttpServlet {
         this.controller = controller;
     }
 
+    /**
+     * DoPost method of the signup page
+     * Gets the information necessary for signing up the User
+     * If process is successful redirects the User to login page
+     * If not successful then back to the signup page
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 

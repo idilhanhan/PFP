@@ -2,10 +2,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-            <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta charset="UTF-8">
 
-         </head>
+    </head>
+
+    <body class="text-center">
 
          <jsp:include page="header.jsp" />
 
@@ -20,7 +22,6 @@
              <%}
          %>
 
-         <body class="text-center">
              <h1>Add Project</h1>
              <form action="addProject" method="post">
                <div class="form-group">
@@ -37,5 +38,5 @@
                </div>
                <button type="submit" class="btn btn-lg btn-primary btn-block">Add</button>
              </form>
-         </body>
+    </body>
 </html>

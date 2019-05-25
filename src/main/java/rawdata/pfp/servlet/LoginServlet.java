@@ -10,13 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-
 import rawdata.pfp.controller.Controller;
 import rawdata.pfp.model.User;
 
 
 /**
+ * Servlet for the Login page of PFP
  * Created by idilhanhan on 10.05.2019.
  */
 @WebServlet("/login")
@@ -36,7 +35,16 @@ public class LoginServlet extends HttpServlet{
         this.controller = controller;
     }
 
-
+    /**
+     * DoPost method of the login page
+     * Gets the information given by the User and does the login operation
+     * If process is successful redirects the User to Home page
+     * If not successful then to the loginError page
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 

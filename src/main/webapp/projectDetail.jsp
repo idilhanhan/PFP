@@ -34,7 +34,7 @@
              <%
                        List<String> names = (List<String>) request.getAttribute("participantNames");
                        for (String name : names){
-                            out.print(name);
+                            out.print(name + " ");
                        }
              %>
              </p>

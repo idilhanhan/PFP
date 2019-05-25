@@ -1,6 +1,7 @@
 package rawdata.pfp.servlet;
 
-import rawdata.pfp.controller.Controller;
+import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -9,10 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.sql.SQLException;
+
+import rawdata.pfp.controller.Controller;
 
 /**
+ * Servlet that handles the Logout feature of PFP
  * Created by idilhanhan on 21.05.2019.
  */
 @WebServlet("/logout")
@@ -30,12 +32,15 @@ public class LogoutServlet extends HttpServlet {
 
     public LogoutServlet(Controller controller){
         this.controller = controller;
-    } //what can ı do with this?? check inject*/
-
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
     }
 
+    /**
+     * Logs the current User out of the application
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

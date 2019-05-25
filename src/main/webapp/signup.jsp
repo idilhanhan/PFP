@@ -12,7 +12,7 @@
          <%
             if (request.getAttribute("signUp") != null){%>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Sign up unsuccessfull!</strong> The name you chose is already taken!
+                    <strong>Sign up unsuccessful!</strong> The name you chose is already taken!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

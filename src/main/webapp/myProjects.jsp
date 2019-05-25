@@ -22,7 +22,7 @@
 
         %>
 
-        <h1>Project Ideas of ${username}</h1>
+        <h1>Project Ideas ${username} is Participating In</h1>
 
             <%
                 List<ProjectIdea> projects = (List<ProjectIdea>) request.getAttribute("projects");

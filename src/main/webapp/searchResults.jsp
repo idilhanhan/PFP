@@ -19,37 +19,45 @@
 
              List<ProjectIdea> projects = (List<ProjectIdea>) request.getAttribute("projects");
 
-             for (ProjectIdea project : projects){
+             if( projects.size() == 0){%>
 
-                String name = project.getName();
-                pageContext.setAttribute("name", name);
-                String info = project.toString();
-                pageContext.setAttribute("info", info);
-                int id = project.getIdea_id();
-                pageContext.setAttribute("id", id);
-          %>
+                <h1>No Search Results for ${searchKeywords}</h1>
 
-          <h1>Search Results for ${searchKeywords}</h1>
+             <%}
+             else{
 
-             <div class="card">
-                <h5 class="card-header">Project Idea</h5>
-                    <div class="card-body">
-                    <h5 class="card-title">${name}</h5>
-                    <p class="card-text">${info}</p>
-                     <div class="btn-group">
-                        <form action="join" method="post">
-                           <input type="hidden" name="projectToJoin" value="${id}" /><%-- this is for the join page --%>
-                           <input class="btn btn-primary" type="submit" value="Join">
-                        </form>
-                        <form action="project" method="post">
-                           <input type="hidden" name="projectID" value="${id}" /><%-- this is for the join page --%>
-                           <input class="btn btn-primary" type="submit" value="More Detail">
-                        </form>
-                     </div>
-                     </div>
-             </div>
-          <%
-              }
+                 for (ProjectIdea project : projects){
+
+                    String name = project.getName();
+                    pageContext.setAttribute("name", name);
+                    String info = project.toString();
+                    pageContext.setAttribute("info", info);
+                    int id = project.getIdea_id();
+                    pageContext.setAttribute("id", id);
+              %>
+
+              <h1>Search Results for ${searchKeywords}</h1>
+
+                 <div class="card">
+                    <h5 class="card-header">Project Idea</h5>
+                        <div class="card-body">
+                        <h5 class="card-title">${name}</h5>
+                        <p class="card-text">${info}</p>
+                         <div class="btn-group">
+                            <form action="join" method="post">
+                               <input type="hidden" name="projectToJoin" value="${id}" /><%-- this is for the join page --%>
+                               <input class="btn btn-primary" type="submit" value="Join">
+                            </form>
+                            <form action="project" method="post">
+                               <input type="hidden" name="projectID" value="${id}" /><%-- this is for the join page --%>
+                               <input class="btn btn-primary" type="submit" value="More Detail">
+                            </form>
+                         </div>
+                         </div>
+                 </div>
+              <%
+                  }
+             }
 
           %>
 

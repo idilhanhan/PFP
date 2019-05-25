@@ -1,5 +1,8 @@
 package rawdata.pfp.servlet;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -12,10 +15,9 @@ import javax.servlet.http.HttpSession;
 import rawdata.pfp.controller.Controller;
 import rawdata.pfp.model.User;
 
-import java.io.IOException;
-import java.sql.SQLException;
 
 /**
+ * Servlet that handles the Join feature of PFP
  * Created by idilhanhan on 11.05.2019.
  */
 @WebServlet("/join")
@@ -35,6 +37,15 @@ public class JoinServlet extends HttpServlet {
         this.controller = controller;
     }
 
+    /**
+     * DoPost method of the Join feature
+     * Redirects the user to Home page of PFP after joining the User to their project choice
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
         int projectToJoin = Integer.parseInt(request.getParameter("projectToJoin"));
@@ -46,8 +57,5 @@ public class JoinServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/browse");
         requestDispatcher.forward(request, response);
-        //response.sendRedirect("/browse");
-
-
     }
 }

@@ -1,7 +1,7 @@
 package rawdata.pfp.servlet;
 
-import rawdata.pfp.controller.Controller;
-import rawdata.pfp.model.User;
+import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.sql.SQLException;
+
+import rawdata.pfp.controller.Controller;
+import rawdata.pfp.model.User;
 
 /**
+ * Servlet for the AddProject page of PFP
  * Created by idilhanhan on 19.05.2019.
  */
 @WebServlet("/addProject")
@@ -34,6 +36,16 @@ public class AddProjectServlet extends HttpServlet {
         this.controller = controller;
     }
 
+    /**
+     * DoPost method of the addProject page
+     * Gets the information given by the user and adds the new project to PFP
+     * If process is successful redirects the User to myProjects page
+     * If not back to the addProject page
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("projectName");
@@ -53,7 +65,6 @@ public class AddProjectServlet extends HttpServlet {
             ServletContext servletContext = getServletContext();
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/addProject.jsp");
             requestDispatcher.forward(request, response);
-            response.sendRedirect("addProject.jsp");
         }
 
     }

@@ -1,6 +1,8 @@
 package rawdata.pfp.servlet;
 
-import rawdata.pfp.controller.Controller;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -9,12 +11,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
+
+import rawdata.pfp.controller.Controller;
 
 /**
+ * Servlet for the Project page of PFP
  * Created by idilhanhan on 20.05.2019.
  */
 @WebServlet("/project")
@@ -33,6 +34,15 @@ public class ProjectServlet extends HttpServlet{
         this.controller = controller;
     }
 
+    /**
+     * DoPost method of the Project page
+     * Redirects the user to single project web page with all of the information about the said project
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException { //TODO: check if this works with get or post
 
         int projectID = Integer.parseInt(request.getParameter("projectID"));

@@ -11,11 +11,8 @@
 
          <%
             if (request.getAttribute("signUp") != null){%>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger" role="alert">
                     <strong>Sign up unsuccessful!</strong> The name you chose is already taken!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
             <%}
          %>
@@ -29,7 +26,8 @@
               <div class="form-group">
                 <label>Password</label><input type="password" class="form-control" name="password" placeholder="password" required>
               </div>
-              <button type="submit" class="btn btn-primary">SignUp</button>
+              <button type="submit" class="btn btn-lg btn-primary">SignUp</button>
+              <a class="btn btn-lg btn-secondary", href="index.jsp", role="button">Go Back</a>
             </form>
 
         </body>

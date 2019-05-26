@@ -13,11 +13,8 @@
 
          <%
              if (request.getAttribute("failure") != null){%>
-               <div class="alert alert-danger alert-dismissible fade show" role="alert">
+               <div class="alert alert-danger" role="alert">
                    <strong>Addition Unsuccessful!</strong> Please make sure the project name is unique and every field is filled
-                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                   </button>
                </div>
              <%}
          %>
@@ -36,7 +33,7 @@
                <div class="form-group">
                  <label>Keywords</label><input type="text" class="form-control" name="keywords" placeholder="Keywords separated with space" required>
                </div>
-               <button type="submit" class="btn btn-lg btn-primary btn-block">Add</button>
+               <button type="submit" class="btn btn-lg btn-primary">Add</button>
              </form>
     </body>
 </html>

@@ -18,35 +18,23 @@
         if (request.getAttribute("joinCheck") != null){
             int check = (Integer)request.getAttribute("joinCheck");
             if (check == 0){  %>
-               <div class="alert alert-danger alert-dismissible fade show" role="alert">
+               <div class="alert alert-danger" role="alert">
                    <strong>Join unsuccessful!</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                     </button>
                </div>
                     <%}
             else if ( check == 1){  %>
-                 <div class="alert alert-success alert-dismissible fade show" role="alert">
+                 <div class="alert alert-success" role="alert">
                       <strong>Join successful!</strong>
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                      </button>
                   </div>
             <%}
             else if ( check == 2){  %>
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <div class="alert alert-danger" role="alert">
                        <strong>Join unsuccessful! You are already participating in the project! </strong>
-                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                       </button>
                   </div>
             <%}
             else if ( check == 3){  %>
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <div class="alert alert-danger" role="alert">
                         <strong>Join unsuccessful! This project is not accepting any more participants! </strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                        </button>
                   </div>
             <%}
 

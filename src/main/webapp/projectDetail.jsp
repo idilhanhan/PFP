@@ -47,7 +47,7 @@
                      <input type="hidden" name="projectToJoin" value="${id}" /><%-- this is for the join page --%>
                      <input class="btn btn-primary" type="submit" value="Join">
                   </form>
-                  <a class="btn btn-primary", href="browse", role="button">Go Back</a>
+                  <a class="btn btn-secondary", href="browse", role="button">Go Back</a>
              </div>
            </div>
     </div>

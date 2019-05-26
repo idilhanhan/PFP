@@ -24,8 +24,10 @@
                 <h1>No Search Results for ${searchKeywords}</h1>
 
              <%}
-             else{
+             else{%>
 
+                <h1>Search Results for ${searchKeywords}</h1>
+             <%
                  for (ProjectIdea project : projects){
 
                     String name = project.getName();
@@ -36,7 +38,7 @@
                     pageContext.setAttribute("id", id);
               %>
 
-              <h1>Search Results for ${searchKeywords}</h1>
+
 
                  <div class="card">
                     <h5 class="card-header">Project Idea</h5>
